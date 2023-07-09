@@ -1,0 +1,10 @@
+.inputNumberArrowStyle::-webkit-outer-spin-button,
+.inputNumberArrowStyle::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.inputNumberArrowStyle[type='number'] {
+  -moz-appearance: textfield;
+}
