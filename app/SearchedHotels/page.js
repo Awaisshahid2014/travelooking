@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import CustomLayout from '../customlayout/CustomLayout';
-import Image from 'next/image';
 import HotelCard from '@/components/cards/HotelCard';
 import classes from '../modulestyles/SearchedHotels.module.css';
 
