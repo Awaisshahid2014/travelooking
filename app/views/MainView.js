@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 
 const MainView = () => {
   const router = useRouter();
+
   const [showPannel, setShowPannel] = useState(false);
   const [searchData, setSearchData] = useState({
     city: '',
@@ -18,11 +19,20 @@ const MainView = () => {
     rooms: 0,
   });
 
-  console.log(searchData, 'searchData searchData');
+  console.log(router, 'router router');
 
   const handleSearch = () => {
     console.log('clicked');
-    router.push('../SearchedHotels');
+    searchData.city && searchData.rooms
+      ? router.push('../SearchedHotels')
+      : alert(
+          !searchData.city && searchData.rooms
+            ? 'Please input city name'
+            : !searchData.rooms && searchData.city
+            ? 'Please select number of rooms'
+            : 'Please provide city name and select rooms',
+          'Please Select',
+        );
   };
 
   return (
@@ -37,7 +47,7 @@ const MainView = () => {
         </div>
         <div style={{ position: 'relative' }}>
           <div
-            className="py-2 bg-white position-absolute"
+            className="py-2 container-fluid bg-white position-absolute"
             style={{
               border: `3px solid ${Colors.main_orange}`,
               top: '50%',
@@ -49,23 +59,23 @@ const MainView = () => {
             }}
           >
             <div className="row pt-2 px-2">
-              <div className="col-lg-3 col-md-3 col-sm-12 col-xs-12 mb-2">
+              <div className="col-lg-3 col-md-12 col-sm-12 col-xs-12 mb-2">
                 <input
                   type="search"
                   placeholder="Where are you going?"
                   className="border-0 p-2 w-100"
-                  onChange={(e) => setSearchData({ city: e.target.value })}
+                  onChange={(e) => setSearchData({ ...searchData, city: e.target.value })}
                   value={searchData.city}
                 />
               </div>
-              <div className="col-lg-5 col-md-5 col-sm-12 col-xs-12 mb-2">
+              <div className="col-lg-5 col-md-6 col-sm-12 col-xs-12 mb-2">
                 <div className="d-flex justify-content-between">
                   <div className="w-100 me-1">
                     <input
                       type="date"
                       name="first_date"
                       className="border-0 p-2 w-100"
-                      onChange={(e) => setSearchData({ firstDate: e.target.value })}
+                      onChange={(e) => setSearchData({ ...searchData, firstDate: e.target.value })}
                       value={searchData.firstDate}
                     />
                   </div>
@@ -74,15 +84,17 @@ const MainView = () => {
                       type="date"
                       name="second_date"
                       className="border-0 p-2 w-100"
-                      onChange={(e) => setSearchData({ secondDate: e.target.value })}
+                      onChange={(e) => setSearchData({ ...searchData, secondDate: e.target.value })}
                       value={searchData.secondDate}
                     />
                   </div>
                 </div>
               </div>
-              <div className="col-lg-3 col-md-3 col-sm-12 col-xs-12 mb-2 position-relative">
+              <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-2 position-relative">
                 <div className="h-100 d-flex align-items-center " onClick={() => setShowPannel(true)}>
-                  <span className="opacity-25">2 adult - 0 children - 1 room</span>
+                  <span className="opacity-75">
+                    {searchData.adults} adult - {searchData.children} children - {searchData.rooms} room
+                  </span>
                 </div>
                 {showPannel == true && (
                   <div
@@ -90,10 +102,11 @@ const MainView = () => {
                     style={{
                       background: Colors.main_white,
                       height: 'auto',
-                      width: '60%',
+                      width: '100%',
                       borderRadius: '10px',
                       position: 'absolute',
-                      marginTop: '1rem',
+                      right: '4px',
+                      marginTop: '.5rem',
                       zIndex: '3',
                     }}
                   >
@@ -108,9 +121,20 @@ const MainView = () => {
                           <span>Adults</span>
                         </div>
                         <div className="d-flex">
-                          <button className="px-2 mx-1 border-primary">+</button>
-                          <span className="px-2">2</span>
-                          <button className="px-2 ms-1 border-primary">-</button>
+                          <button
+                            className="px-2 mx-1 border-primary"
+                            onClick={() => setSearchData({ ...searchData, adults: searchData.adults + 1 })}
+                          >
+                            +
+                          </button>
+                          <span className="px-2">{searchData.adults}</span>
+                          <button
+                            className={searchData.adults <= 0 ? 'px-2 ms-1 border-default' : 'px-2 ms-1 border-primary'}
+                            disabled={searchData.adults <= 0 ? true : ''}
+                            onClick={() => setSearchData({ ...searchData, adults: searchData.adults - 1 })}
+                          >
+                            -
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -120,9 +144,22 @@ const MainView = () => {
                           <span>Children</span>
                         </div>
                         <div className="d-flex">
-                          <button className="px-2 mx-1 border-primary">+</button>
-                          <span className="px-2">2</span>
-                          <button className="px-2 ms-1 border-primary">-</button>
+                          <button
+                            className={'px-2 mx-1 border-primary'}
+                            onClick={() => setSearchData({ ...searchData, children: searchData.children + 1 })}
+                          >
+                            +
+                          </button>
+                          <span className="px-2">{searchData.children}</span>
+                          <button
+                            className={
+                              searchData.children <= 0 ? 'px-2 ms-1 border-default' : 'px-2 ms-1 border-primary'
+                            }
+                            disabled={searchData.children <= 0 ? true : ''}
+                            onClick={() => setSearchData({ ...searchData, children: searchData.children - 1 })}
+                          >
+                            -
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -132,18 +169,29 @@ const MainView = () => {
                           <span>Rooms</span>
                         </div>
                         <div className="d-flex">
-                          <button className="px-2 mx-1 border-primary">+</button>
-                          <span className="px-2">2</span>
-                          <button className="px-2 ms-1 border-primary">-</button>
+                          <button
+                            className={'px-2 mx-1 border-primary'}
+                            onClick={() => setSearchData({ ...searchData, rooms: searchData.rooms + 1 })}
+                          >
+                            +
+                          </button>
+                          <span className="px-2">{searchData.rooms}</span>
+                          <button
+                            className={searchData.rooms <= 0 ? 'px-2 ms-1 border-default' : 'px-2 ms-1 border-primary'}
+                            disabled={searchData.rooms <= 0 ? true : ''}
+                            onClick={() => setSearchData({ ...searchData, rooms: searchData.rooms - 1 })}
+                          >
+                            -
+                          </button>
                         </div>
                       </div>
                     </div>
                   </div>
                 )}
               </div>
-              <div className="col-lg-1 col-md-1 col-sm-12 col-xs-12 mb-2">
+              <div className="col-lg-1 col-md-12 col-sm-12 col-xs-12 mb-2">
                 <div className="d-flex justify-content-end">
-                  <button className="bg-primary p-2 w-100" onClick={handleSearch}>
+                  <button className="btn btn-primary btn-md p-2 w-100 text-white" onClick={handleSearch}>
                     Search
                   </button>
                 </div>
