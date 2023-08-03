@@ -8,7 +8,7 @@ const PrimaryHeader = ({ padding, height, background }) => {
     <div className="row" style={{ padding: padding, height: height, background: background }}>
       <div className="d-flex alig-items-center justify-content-between py-2">
         <div>
-          <p className="text-white">Booking Trip</p>
+          <p className="text-white">Travelooking</p>
         </div>
         <div>
           <button className="mx-1 px-2  border-0">Register</button>

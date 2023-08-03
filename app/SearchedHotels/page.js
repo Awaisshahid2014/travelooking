@@ -1,10 +1,12 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import CustomLayout from '../customlayout/CustomLayout';
 import HotelCard from '@/components/cards/HotelCard';
 import classes from '../modulestyles/SearchedHotels.module.css';
 
 const SearchedHotels = () => {
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
   return (
     <CustomLayout>
       <div style={{ padding: '10px 3rem 5rem 3rem' }}>

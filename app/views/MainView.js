@@ -5,6 +5,7 @@ import Colors from '@/utils/Colors';
 import { MdClose } from 'react-icons/md';
 import CityCard from '@/components/cards/CityCard';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const MainView = () => {
   const router = useRouter();
@@ -19,20 +20,15 @@ const MainView = () => {
     rooms: 0,
   });
 
-  console.log(router, 'router router');
-
   const handleSearch = () => {
-    console.log('clicked');
-    searchData.city && searchData.rooms
-      ? router.push('../SearchedHotels')
-      : alert(
-          !searchData.city && searchData.rooms
-            ? 'Please input city name'
-            : !searchData.rooms && searchData.city
-            ? 'Please select number of rooms'
-            : 'Please provide city name and select rooms',
-          'Please Select',
-        );
+    alert(
+      !searchData.city && searchData.rooms
+        ? 'Please input city name'
+        : !searchData.rooms && searchData.city
+        ? 'Please select number of rooms'
+        : 'Please provide city name and select rooms',
+      'Please Select',
+    );
   };
 
   return (
@@ -191,9 +187,16 @@ const MainView = () => {
               </div>
               <div className="col-lg-1 col-md-12 col-sm-12 col-xs-12 mb-2">
                 <div className="d-flex justify-content-end">
-                  <button className="btn btn-primary btn-md p-2 w-100 text-white" onClick={handleSearch}>
-                    Search
-                  </button>
+                  <Link
+                    href={{
+                      pathname: searchData.city && searchData.rooms ? '../SearchedHotels' : '/',
+                      query: { keyword: searchData.city && searchData.rooms ? 'this way' : '' },
+                    }}
+                    onClick={searchData.city && searchData.rooms ? null : handleSearch}
+                  >
+                    {/* <p className="btn btn-primary btn-md p-2 w-100 text-white" onClick={handleSearch}> */}
+                    <p className="btn btn-primary btn-md p-2 w-100 text-white">Search</p>
+                  </Link>
                 </div>
               </div>
             </div>
