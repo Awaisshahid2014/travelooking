@@ -20,7 +20,31 @@ const MainView = () => {
     rooms: 0,
   });
 
+  let queryObject = {
+    pathname: '../SearchedHotels',
+    query: {},
+  };
+
+  if (!searchData.city && searchData.rooms) {
+    console.log('if condition');
+    queryObject = {
+      pathname: '../SearchedHotels',
+      query: {
+        city: searchData.city,
+        rooms: searchData.rooms,
+        adults: searchData.adults,
+        children: searchData.children,
+      },
+    };
+  } else {
+    console.log('else condition');
+    queryObject = {
+      pathname: '/',
+    };
+  }
+
   const handleSearch = () => {
+    setShowPannel(false);
     alert(
       !searchData.city && searchData.rooms
         ? 'Please input city name'
@@ -187,15 +211,8 @@ const MainView = () => {
               </div>
               <div className="col-lg-1 col-md-12 col-sm-12 col-xs-12 mb-2">
                 <div className="d-flex justify-content-end">
-                  <Link
-                    href={{
-                      pathname: searchData.city && searchData.rooms ? '../SearchedHotels' : '/',
-                      query: { keyword: searchData.city && searchData.rooms ? 'this way' : '' },
-                    }}
-                    onClick={searchData.city && searchData.rooms ? null : handleSearch}
-                  >
-                    {/* <p className="btn btn-primary btn-md p-2 w-100 text-white" onClick={handleSearch}> */}
-                    <p className="btn btn-primary btn-md p-2 w-100 text-white">Search</p>
+                  <Link href={queryObject} onClick={searchData.city && searchData.rooms ? null : handleSearch}>
+                    <div className="btn btn-primary btn-md p-2 w-100 text-white">Search</div>
                   </Link>
                 </div>
               </div>
